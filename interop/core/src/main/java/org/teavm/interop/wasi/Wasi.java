@@ -49,6 +49,48 @@ public final class Wasi {
     public static final byte WHENCE_CURRENT = 1;
     public static final byte WHENCE_END = 2;
 
+    // Networking items
+    /**
+     * Append mode: Data written to the file is always appended to the file's end.
+     */
+    public static final short SOCK_ACCEPT_APPEND = 1;
+    /**
+     * Write according to synchronized I/O data integrity completion. Only the data stored in the file is synchronized.
+     */
+    public static final short SOCK_ACCEPT_DSYNC = 1 << 2;
+    /**
+     * Non-blocking mode.
+     */
+    public static final short SOCK_ACCEPT_NON_BLOCK = 1 << 3;
+    /**
+     * Synchronized read I/O operations.
+     */
+    public static final short SOCK_ACCEPT_RSYNC = 1 << 4;
+    /**
+     * Write according to synchronized I/O file integrity completion.
+     * In addition to synchronizing the data stored in the file, the implementation may also synchronously update
+     * the file's metadata.
+     */
+    public static final short SOCK_ACCEPT_SYNC = 1 << 5;
+
+    /**
+     * Returns the message without removing it from the socket's receive queue.
+     */
+    public static final short SOCK_RECV_PEEK = 1;
+    /**
+     * On byte-stream sockets, block until the full amount of data can be returned.
+     */
+    public static final short SOCK_RECV_WAIT_ALL = 1 << 2;
+
+    /**
+     * Disables further receive operations.
+     */
+    public static final short SOCK_SHUTDOWN_RD = 1;
+    /**
+     * Disables further send operations.
+     */
+    public static final short SOCK_SHUTDOWN_WD = 1 << 2;
+
     private static byte[] initialRandom;
     private static long nextRandom;
 
@@ -130,6 +172,25 @@ public final class Wasi {
 
     @Import(name = "random_get", module = "wasi_snapshot_preview1")
     public static native short randomGet(Address buffer, int bufferLength);
+
+    @Import(name = "sock_accept", module = "wasi_snapshot_preview1")
+    public static native short sockAccept(int sockFD, int flags);
+
+    @Import(name = "sock_recv", module = "wasi_snapshot_preview1")
+    public static native short sockRecv(int sockFD, Address vec, short flags);
+
+    /**
+     * sockSend
+     * @param sockFD the socket file descriptor to use for sending
+     * @param vec the data
+     * @param flags Must be set to zero
+     * @return
+     */
+    @Import(name = "sock_send", module = "wasi_snapshot_preview1")
+    public static native short sockSend(int sockFD, Address vec, short flags);
+
+    @Import(name = "sock_shutdown", module = "wasi_snapshot_preview1")
+    public static native short sockShutdown(int sockFD, short flags);
 
     public static String errnoMessage(String sysCall, short errno) {
         // TODO: Provide a friendly message for each case.

@@ -18,14 +18,13 @@ package org.teavm.classlib.java.io;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Objects;
 import org.teavm.classlib.PlatformDetector;
 import org.teavm.classlib.fs.VirtualFile;
 import org.teavm.classlib.fs.VirtualFileAccessor;
 import org.teavm.classlib.fs.wasi.WasiVirtualFileAccessor;
 
-public class TFileOutputStream extends OutputStream {
+public class TFileOutputStream extends TOutputStream {
     private static final byte[] ONE_BYTE_BUFER = new byte[1];
     private VirtualFileAccessor accessor;
 
