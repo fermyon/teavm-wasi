@@ -28,7 +28,7 @@ public final class Memory {
     private Memory() {
     }
 
-    private static final int MAP_SIZE = 512;
+    private static final int MAP_SIZE = 2048;
     public static final int HEAP_OFFSET = 65 * MAP_SIZE;
 
     private static int ceilingDivide(int n, int d) {
@@ -61,7 +61,7 @@ public final class Memory {
             return Address.align(Address.fromInt(HEAP_OFFSET), align);
         }
 
-        if (newSize < 512) {
+        if (newSize < MAP_SIZE) {
             int needed = ceilingDivide(newSize, 8);
             long mask = ~(0xFFFFFFFFFFFFFFFFL << needed);
             for (int i = 0; i < MAP_SIZE / 8; ++i) {
@@ -89,7 +89,7 @@ public final class Memory {
                 }
             }
         } else {
-            int needed = ceilingDivide(newSize, 512);
+            int needed = ceilingDivide(newSize, MAP_SIZE);
             int count = 0;
             for (int i = 0; i < MAP_SIZE / 8; ++i) {
                 long entry = Address.fromInt(i * 8).getLong();
@@ -135,7 +135,7 @@ public final class Memory {
         }
 
         int offset = (address.toInt() - MAP_SIZE) / 8;
-        if (size < 512) {
+        if (size < MAP_SIZE) {
             int needed = ceilingDivide(size, 8);
             long mask = ~(0xFFFFFFFFFFFFFFFFL << needed);
             Address mapAddress = Address.fromInt((offset / 64) * 8);
@@ -146,7 +146,7 @@ public final class Memory {
             }
             mapAddress.putLong(entry & ~(mask << (offset % 64)));
         } else {
-            int needed = ceilingDivide(size, 512);
+            int needed = ceilingDivide(size, MAP_SIZE);
             for (int i = 0; i < needed; ++i) {
                 Address mapAddress = Address.fromInt((offset / 8) + (i * 8));
                 long entry = mapAddress.getLong();
