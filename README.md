@@ -83,7 +83,7 @@ TeaVM has its own reimplementation of Java class library, which is either implem
 * [Joda-Time](https://github.com/JodaOrg/joda-time) (Apache 2.0)
 * [jzlib](https://github.com/ymnk/jzlib) (BSD style license)
 
-If you want to contribute code to implementation of Java class library, please make sure it's no based on OpenJDK or other code licensed under (L)GPL.
+If you want to contribute code to implementation of Java class library, please make sure it's not based on OpenJDK or other code licensed under (L)GPL.
 
 
 Feedback
